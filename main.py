@@ -187,7 +187,7 @@ class TinyChat:
             start_idx = max(0, idx - n_context + 1)
             end_idx = min(len(self.combined_df), idx + 1)
             context = self.combined_df["text"].iloc[start_idx:end_idx].tolist()
-            context = [line.replace("Recognized:", "Agent:").replace("Bot response:", "Assistant:") for line in context]
+            context = [line.replace("Recognized:", "Agent:").replace("Bot response:", "TrainingGuru:") for line in context]
             top_conversations.append("\n".join(context))
 
         return top_conversations
