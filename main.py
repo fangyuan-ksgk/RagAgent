@@ -230,7 +230,7 @@ import random
 console = Console()
 
 def main():
-    console.print(Panel("Hi! I'm FY, here to help you chat with your database!", title="Welcome", style="bold green"))
+    console.print(Panel("Hi! I'm FY, your personal RAG Agent here to help you chat with your database!", title="Welcome", style="bold green"))
     console.print("Type 'exit' to end the conversation.")
 
     # Initialize TinyChat with the database folder
