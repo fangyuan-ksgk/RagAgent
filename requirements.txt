@@ -7,3 +7,4 @@ sentence-transformers
 pandas
 scikit-learn
 rich
+pandasai

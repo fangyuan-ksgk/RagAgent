@@ -1,6 +1,6 @@
 import os
 # os.environ["ANTHROPIC_API_KEY"] = "YOUR_API_KEY"
-
+# os.environ["PANDAS_API_KEY"] = "YOUR_API_KEY"
 
 import pandas as pd
 from typing import List, Dict, Any
@@ -15,6 +15,8 @@ from rich.syntax import Syntax
 from rich.markdown import Markdown
 import time
 import random
+from pandasai import Agent # This helps us chat with the dataframe
+
 
 console = Console()
 clean_line = lambda line: line.split("]")[-1].strip()
@@ -119,6 +121,21 @@ retrieve_tool = {
     }
 }
 
+data_analysis_tool = {
+    "name": "data_analysis",
+    "description": "Perform data analysis on the dataframe base on a query",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "query": {
+                "type": "string",
+                "description": "The user's query to perform data analysis"
+            }
+        }
+    },
+    "required": ["query"]
+}
+
 def get_claude_response(client, messages, tools, system_prompt):
     """ 
     Obtain response from Claude
@@ -149,6 +166,7 @@ class TinyChat:
         self.database_folder = database_folder
         self.retrieved_data = self._get_data()
         self.combined_df = self._combine_data()
+        self.pandas_agent = Agent(self.combined_df) # Pandas Agent AI
         self.model = self._setup_embedding_model()
         self.embeddings = self._create_embeddings()
         self.client = Anthropic(api_key=getenv("ANTHROPIC_API_KEY"))
@@ -166,6 +184,12 @@ class TinyChat:
 
     def _combine_data(self):
         return pd.concat(self.retrieved_data.values(), ignore_index=True)
+    
+    def _get_stat(self, query):
+        """ 
+        Chat with Pandas AI Agent for statistics & info in the dataframe
+        """
+        return self.pandas_agent.chat(query)
 
     def _setup_embedding_model(self):
         return SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
