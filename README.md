@@ -12,8 +12,8 @@ RAG Agent is an interactive command-line interface (CLI) which allow you to chat
 
 1. Clone this repository:
    ```
-   git clone https://github.com/Doriandarko/claude-engineer.git
-   cd claude-engineer
+   git clone https://github.com/fangyuan-ksgk/SmallRag.git
+   cd RagAgent
    ```
 
 2. Install the required dependencies:
