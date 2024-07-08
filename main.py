@@ -130,8 +130,8 @@ class TinyChat:
         self.model = self._setup_embedding_model()
         self.embeddings = self._create_embeddings()
         self.client = Anthropic(api_key=getenv("ANTHROPIC_API_KEY"))
-        self.chat_prompt = "You are a helpful assistant that can help user understand the database better. You will discuss the retrieved conversation with user."
-        self.rag_prompt = "You are a helpful assistant that can help user understand the database better. Make wise decision on whether to retrieve the database with queries."
+        self.chat_prompt = "You are a FY, an AI that can help user understand the database better. You will discuss the retrieved conversation with user."
+        self.rag_prompt = "You are a FY, an AI that can help user understand the database better. Make wise decision on whether to retrieve the database with queries."
         self.messages = []
 
     def _get_data(self):
