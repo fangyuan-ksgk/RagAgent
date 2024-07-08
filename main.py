@@ -8,7 +8,19 @@ from anthropic import Anthropic
 from os import getenv
 
 clean_line = lambda line: line.split("]")[-1].strip()
-prepare_str = lambda conversations: f"Here is the relevant conversation to user's query: {', '.join([f'{i+1}: {conv}' for i, conv in enumerate(conversations)])}"
+
+def prepare_str(conversations):
+    """
+    Prepare a formatted string of conversations for the user's query.
+
+    Args:
+        conversations (List[str]): A list of conversation strings.
+
+    Returns:
+        str: A formatted string containing numbered conversations.
+    """
+    formatted_conversations = [f"{i+1}: {conv}" for i, conv in enumerate(conversations)]
+    return f"Here are the relevant conversations to the user's query:\n" + "\n".join(formatted_conversations)
 
 def get_csv_and_excel_files(directory: str) -> List[str]:
     """
@@ -133,6 +145,7 @@ class TinyChat:
         self.chat_prompt = "You are a FY, an AI that can help user understand the database better. You will discuss the retrieved conversation with user."
         self.rag_prompt = "You are a FY, an AI that can help user understand the database better. Make wise decision on whether to retrieve the database with queries."
         self.messages = []
+        self.retrieved_conversations = ""
 
     def _get_data(self):
         retrieved_data = retrieve_data(self.database_folder)
@@ -176,7 +189,8 @@ class TinyChat:
         self.messages.append({"role": "user", "content": query})
         response = get_claude_response(self.client, self.messages, tools=[retrieve_tool], system_prompt=self.rag_prompt)
         
-        # return response
+        self.retrieved_conversations = ""
+        
         for block in response.content:
             if block.type == "tool_use" and block.name=="retrieve":
                 top_conversations = self.retrieve(**block.input)
@@ -193,9 +207,11 @@ class TinyChat:
                     "role": "user",
                     "content": context,
                 })
+                
+                self.retrieved_conversations = context
 
-                # print("Issue Begins?")
                 response = get_claude_response(self.client, self.messages, tools=[], system_prompt=self.chat_prompt)
+
         
         assistant_response = response.content[0].text
         self.messages.append({"role": "assistant", "content": assistant_response})
@@ -208,6 +224,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.syntax import Syntax
 from rich.markdown import Markdown
+import time
+import random
 
 console = Console()
 
@@ -229,10 +247,20 @@ def main():
         # Use TinyChat to process the user's input and get a response
         response = tiny_chat.chat(user_input)
         
+        # Display Retrieved Conversations
+        if tiny_chat.retrieved_conversations:
+            console.print(Panel("[bold green]Retrieved Conversations:[/bold green]", style="green"))
+            conversations = tiny_chat.retrieved_conversations.split("\n")
+            for i, conv in enumerate(conversations[1:], 1):  # Skip the first line as it's the header
+                if conv.strip():  # Check if the line is not empty
+                    color = f"color({i % 5 + 1})"  # Cycle through 5 different colors
+                    console.print(Panel(Markdown(conv), border_style=color, expand=False))
+                    time.sleep(random.uniform(0.1, 0.3))  # Random delay between 0.1 and 0.3 seconds
+
         # Display the assistant's response
-        console.print("[bold green]Assistant:[/bold green]", style="green")
-        console.print(Markdown(response))
+        console.print(Panel.fit("[bold green]RAG-Agent:[/bold green]", style="green"))
+        response_with_newlines = response.replace("\n", "  \n")  # Fix newlines for Markdown
+        console.print(Panel(Markdown(response_with_newlines), style="green", expand=False))
 
 if __name__ == "__main__":
     main()
-
