@@ -1,4 +1,7 @@
 import os
+# os.environ["ANTHROPIC_API_KEY"] = "YOUR_API_KEY"
+
+
 import pandas as pd
 from typing import List, Dict, Any
 from sentence_transformers import SentenceTransformer
@@ -6,7 +9,14 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 from anthropic import Anthropic
 from os import getenv
+from rich.console import Console
+from rich.panel import Panel
+from rich.syntax import Syntax
+from rich.markdown import Markdown
+import time
+import random
 
+console = Console()
 clean_line = lambda line: line.split("]")[-1].strip()
 
 def prepare_str(conversations):
@@ -220,14 +230,6 @@ class TinyChat:
 
 
 
-from rich.console import Console
-from rich.panel import Panel
-from rich.syntax import Syntax
-from rich.markdown import Markdown
-import time
-import random
-
-console = Console()
 
 def main():
     console.print(Panel("Hi! I'm FY, your personal RAG Agent here to help you chat with your database!", title="Welcome", style="bold green"))

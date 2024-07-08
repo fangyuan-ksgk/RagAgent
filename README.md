@@ -4,8 +4,9 @@ RAG Agent is an interactive command-line interface (CLI) which allow you to chat
 
 ## ✨ Features
 
-- 💬 Interactive chat interface with Claude-3.5-Sonnet
+- 💬 Interactive chat interface with RAG Agent
 - 💬 Adaptive on-request RAG
+- More to come
 
 
 ## 🛠️ Installation
@@ -22,20 +23,20 @@ RAG Agent is an interactive command-line interface (CLI) which allow you to chat
    ```
 
 3. Set up your API keys:
-   - Add your Anthropic and Tavily API keys at the start of the file:
+   - Add your Anthropic API key at the start of the file:
      ```python
-     client = Anthropic(api_key="YOUR API KEY")
+     os.environ["ANTHROPIC_API_KEY"] = "YOUR_API_KEY"
      ```
 
 ## 🚀 Usage
 
-Run the main script to start the Claude Engineer interface:
+Run the main script to start the RAG Agent interface:
 
 ```
 python main.py
 ```
 
-Once started, you can interact with Claude Engineer by typing your queries or commands. Some example interactions:
+Once started, you can interact with RAG Agent by typing your queries or commands. Some example interactions:
 
 - "What are the related conversation about insurance?"
 
