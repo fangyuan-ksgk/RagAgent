@@ -2,3 +2,8 @@ anthropic
 colorama
 pygments
 python-dotenv
+sentencepiece
+sentence-transformers
+pandas
+scikit-learn
+rich
