@@ -26,6 +26,7 @@ RAG Agent is an interactive command-line interface (CLI) which allow you to chat
    - Add your Anthropic API key at the start of the file:
      ```python
      os.environ["ANTHROPIC_API_KEY"] = "YOUR_API_KEY"
+     os.environ["PANDASAI_API_KEY"] = "YOUR_API_KEY"
      ```
 
 ## 🚀 Usage
