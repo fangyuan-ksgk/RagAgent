@@ -1,0 +1,2 @@
+2024-07-12 11:53:29 [INFO] Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+2024-07-12 11:53:33 [INFO] Use pytorch device_name: mps
